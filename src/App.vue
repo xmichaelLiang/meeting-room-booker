@@ -1,30 +1,29 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div id="app">
+    <!-- 如果已登入，才顯示 Navbar -->
+    <Navbar v-if="isAuthenticated" />
+
+    <!-- 主要內容區域 -->
+    <div class="container mt-4">
+      <router-view />
+    </div>
+  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Navbar from "@/components/NavbarItem.vue";
+import { mapGetters } from "vuex";
 
-nav {
-  padding: 30px;
+export default {
+  components: {
+    Navbar,
+  },
+  computed: {
+    ...mapGetters(["isAuthenticated"]), // 檢查是否已登入
+  },
+};
+</script>
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+<style>
+/* 可加入全域樣式 */
 </style>
