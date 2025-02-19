@@ -1,0 +1,5 @@
+npm install crypto-js
+ // 密碼雜湊處理 (SHA-256)
+        const hashedPassword = CryptoJS.SHA256(this.password).toString();
+
+crypto-js
