@@ -1,10 +1,15 @@
 <template>
-  <div class="container">
-    <h2 class="my-4">請登入</h2>
+  <div class="container mt-5">
+    <h2>登入系統</h2>
     <form @submit.prevent="handleLogin">
       <div class="mb-3">
         <label class="form-label">帳號</label>
-        <input v-model="username" type="text" class="form-control" required />
+        <input
+          v-model="username"
+          type="text"
+          class="form-control"
+          placeholder="輸入帳號"
+        />
       </div>
       <div class="mb-3">
         <label class="form-label">密碼</label>
@@ -12,23 +17,27 @@
           v-model="password"
           type="password"
           class="form-control"
-          required
+          placeholder="輸入密碼"
         />
       </div>
-      <button type="submit" class="btn btn-primary">登入</button>
+      <button class="btn btn-primary" type="submit">登入</button>
     </form>
+    <div v-if="errorMessage" class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
 import { useRouter } from "vue-router";
+import { mapActions } from "vuex";
 
 export default {
   data() {
     return {
       username: "",
       password: "",
+      errorMessage: "",
     };
   },
   setup() {
@@ -38,11 +47,14 @@ export default {
   methods: {
     ...mapActions(["login"]),
     async handleLogin() {
-      try {
-        await this.login({ username: this.username, password: this.password });
+      const success = await this.login({
+        username: this.username,
+        password: this.password,
+      });
+      if (success) {
         this.router.push("/reservation");
-      } catch (error) {
-        alert("登入失敗");
+      } else {
+        this.errorMessage = "登入失敗，請確認帳號與密碼";
       }
     },
   },

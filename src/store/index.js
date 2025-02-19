@@ -1,18 +1,17 @@
 import { createStore } from "vuex";
-import axios from "axios";
 
 export default createStore({
   state: {
     user: {
-      token: localStorage.getItem("token") || null, // 從 localStorage 讀取 token，避免刷新後遺失
-      isAdmin: JSON.parse(localStorage.getItem("isAdmin")) || false, // 讀取管理者身份
+      token: localStorage.getItem("token") || null,
+      isAdmin: JSON.parse(localStorage.getItem("isAdmin")) || false,
     },
   },
   mutations: {
     setUser(state, userData) {
       state.user.token = userData.token;
       state.user.isAdmin = userData.isAdmin;
-      localStorage.setItem("token", userData.token); // 存入 localStorage
+      localStorage.setItem("token", userData.token);
       localStorage.setItem("isAdmin", JSON.stringify(userData.isAdmin));
     },
     logout(state) {
@@ -24,24 +23,31 @@ export default createStore({
   },
   actions: {
     async login({ commit }, credentials) {
-      try {
-        const response = await axios.post(
-          "YOUR_BACKEND_API/auth/login",
-          credentials
-        );
-        const { token, isAdmin } = response.data;
+      // TODO: 模擬測試資料
+      const testAccounts = [
+        { username: "admin", password: "123456", isAdmin: true },
+        { username: "user", password: "123456", isAdmin: false },
+      ];
 
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; // 設定全域 Axios 頭部
+      const matchedUser = testAccounts.find(
+        (user) =>
+          user.username === credentials.username &&
+          user.password === credentials.password
+      );
 
-        commit("setUser", { token, isAdmin });
+      if (matchedUser) {
+        // 假設登入成功，生成一個隨機的 "token"
+        const fakeToken =
+          "fake-jwt-token-" + Math.random().toString(36).substring(2);
+
+        commit("setUser", { token: fakeToken, isAdmin: matchedUser.isAdmin });
         return true; // 登入成功
-      } catch (error) {
-        console.error("登入失敗:", error);
+      } else {
+        console.error("登入失敗: 帳號或密碼錯誤");
         return false; // 登入失敗
       }
     },
     logout({ commit }) {
-      axios.defaults.headers.common["Authorization"] = ""; // 清除授權標頭
       commit("logout");
     },
   },

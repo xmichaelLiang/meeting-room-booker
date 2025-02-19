@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/reservation"
-        >會議室預約</router-link
+        >會議室系統</router-link
       >
       <button
         class="navbar-toggler"
@@ -24,15 +24,15 @@
               >會議室管理</router-link
             >
           </li>
-          <li class="nav-item">
+          <li class="nav-item ms-auto">
             <button
-              class="btn btn-outline-light ms-3"
+              class="btn btn-outline-light"
               v-if="isAuthenticated"
-              @click="logout"
+              @click="handleLogout"
             >
               登出
             </button>
-            <router-link v-else class="btn btn-outline-light ms-3" to="/login"
+            <router-link v-else class="btn btn-outline-light" to="/login"
               >登入</router-link
             >
           </li>
@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
 import { useRouter } from "vue-router";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   computed: {
